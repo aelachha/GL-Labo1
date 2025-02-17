@@ -4,6 +4,10 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+
+import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "ETUDIANT")
@@ -23,4 +27,7 @@ public class Etudiant {
     private String prenom;
     @Column(length = 100)
     private String masterType;
+
+    @OneToMany(mappedBy = "etudiant")
+    protected Set<Note> bulletin;
 }

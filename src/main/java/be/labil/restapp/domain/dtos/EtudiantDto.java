@@ -13,5 +13,6 @@ public class EtudiantDto implements Serializable {
     private String matricule;
     private String nom;
     private String prenom;
+    private String masterType;
 
 }

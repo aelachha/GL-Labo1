@@ -19,30 +19,30 @@ import java.util.Set;
 public class EtudiantServiceImpl implements IEtudiantService {
 
     private static final Logger log = LoggerFactory.getLogger(EtudiantServiceImpl.class);
-    private final IEtudiantRepository etudiantRepository;
+    private final IEtudiantRepository ietudiantRepository;
     private final IEtudiantMapper iEtudiantMapper;
 
     @Override
     public Etudiant insert(Etudiant etudiant) {
-        return etudiantRepository.save(etudiant);
+        return ietudiantRepository.save(etudiant);
     }
 
     @Override
     public List<EtudiantDto> list() {
         Set<Etudiant> etudiantSet = new HashSet<>();
-        etudiantRepository.findAll().iterator().forEachRemaining(etudiantSet::add);
+        ietudiantRepository.findAll().iterator().forEachRemaining(etudiantSet::add);
         return iEtudiantMapper.toDto(etudiantSet).stream().toList();
     }
 
     @Override
     public EtudiantDto update(Long id, EtudiantDto etudiantDto) {
-        return etudiantRepository.findById(id)
+        return ietudiantRepository.findById(id)
                 .map(e -> {
                     e.setNom(etudiantDto.getNom());
                     e.setPrenom(etudiantDto.getPrenom());
                     e.setMatricule(etudiantDto.getMatricule());
-//                    e.setMasterType(etudiantDto.getMasterType());
-                     Etudiant updateEtudiant =  etudiantRepository.save(e);
+                    e.setMasterType(etudiantDto.getMasterType());
+                     Etudiant updateEtudiant =  ietudiantRepository.save(e);
                     log.warn ( " Mise à jour de léétudiant {} effectué avec succès" , etudiantDto.getMatricule()) ;
                     return iEtudiantMapper.toDto(updateEtudiant);
                 })
@@ -51,7 +51,7 @@ public class EtudiantServiceImpl implements IEtudiantService {
 
     @Override
     public Boolean delete(Long id) {
-        etudiantRepository.deleteById(id);
+        ietudiantRepository.deleteById(id);
         return true;
     }
 }
