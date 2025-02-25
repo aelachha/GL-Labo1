@@ -11,15 +11,13 @@ import java.util.Set;
 
 @Entity
 @Table(name = "ETUDIANT")
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter @NoArgsConstructor
 public class Etudiant {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @Column(unique = true,length = 10)
+    @Column(unique = true,length = 10,nullable = false)
     private String matricule;
     @Column(length = 30)
     private String nom;
@@ -28,6 +26,6 @@ public class Etudiant {
     @Column(length = 100)
     private String masterType;
 
-    @OneToMany(mappedBy = "etudiant")
-    protected Set<Note> bulletin;
+    @OneToMany(mappedBy = "etudiant",cascade = CascadeType.ALL)
+    protected Set<Note> notes;
 }

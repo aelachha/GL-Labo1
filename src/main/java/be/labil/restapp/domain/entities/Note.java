@@ -7,9 +7,7 @@ import lombok.Setter;
 
 @Entity
 @Table(name = "NOTE")
-@Getter
-@Setter
-@NoArgsConstructor
+@Getter @Setter @NoArgsConstructor
 public class Note {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,11 +16,11 @@ public class Note {
     private double cote;
 
 
-    @ManyToOne
+    @ManyToOne(optional = false,fetch = FetchType.LAZY)
     @JoinColumn(name = "etudiant_id")
     private Etudiant etudiant;
 
-    @ManyToOne
+    @ManyToOne(optional = false)
     @JoinColumn(name = "matiere_id")
     private Matiere matiere;
 }

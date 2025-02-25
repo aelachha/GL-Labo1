@@ -1,13 +1,23 @@
 package be.labil.restapp.domain.mappers;
 
-import be.labil.restapp.domain.dtos.EtudiantDto;
 import be.labil.restapp.domain.dtos.NoteDto;
-import be.labil.restapp.domain.entities.Etudiant;
+import be.labil.restapp.domain.dtos.ShortNoteDTO;
 import be.labil.restapp.domain.entities.Note;
-import org.mapstruct.Mapper;
-import org.mapstruct.MappingConstants;
-import org.mapstruct.ReportingPolicy;
+import org.aspectj.weaver.ast.Not;
+import org.mapstruct.*;
+import org.mapstruct.factory.Mappers;
 
-@Mapper(unmappedTargetPolicy = ReportingPolicy.IGNORE, componentModel = MappingConstants.ComponentModel.SPRING)
-public interface INoteMapper extends IGenericMapper<NoteDto, Note>{
+import java.util.Set;
+
+@Mapper
+public interface INoteMapper {
+    INoteMapper INSTANCE = Mappers.getMapper(INoteMapper.class);
+
+    Note toEntity(NoteDto dto,
+                  @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+    NoteDto toDto(Note entity,
+                  @Context CycleAvoidingMappingContext cycleAvoidingMappingContext);
+
+    NoteDto dtoToModel(ShortNoteDTO shortNoteDTO);
+
 }

@@ -2,6 +2,8 @@ package be.labil.restapp.services;
 
 import be.labil.restapp.domain.dtos.EtudiantDto;
 import be.labil.restapp.domain.entities.Etudiant;
+import be.labil.restapp.domain.entities.UniteEtude;
+import be.labil.restapp.domain.mappers.CycleAvoidingMappingContext;
 import be.labil.restapp.domain.mappers.IEtudiantMapper;
 import be.labil.restapp.repositories.interfaces.IEtudiantRepository;
 import be.labil.restapp.services.interfaces.IEtudiantService;
@@ -20,7 +22,6 @@ public class EtudiantServiceImpl implements IEtudiantService {
 
     private static final Logger log = LoggerFactory.getLogger(EtudiantServiceImpl.class);
     private final IEtudiantRepository ietudiantRepository;
-    private final IEtudiantMapper iEtudiantMapper;
 
     @Override
     public Etudiant insert(Etudiant etudiant) {
@@ -31,7 +32,8 @@ public class EtudiantServiceImpl implements IEtudiantService {
     public List<EtudiantDto> list() {
         Set<Etudiant> etudiantSet = new HashSet<>();
         ietudiantRepository.findAll().iterator().forEachRemaining(etudiantSet::add);
-        return iEtudiantMapper.toDto(etudiantSet).stream().toList();
+        return etudiantSet.stream().map(x->IEtudiantMapper.INSTANCE.toDto(x,new CycleAvoidingMappingContext())).toList();
+//        return iEtudiantMapper.toDto(etudiantSet).stream().toList();
     }
 
     @Override
@@ -44,7 +46,7 @@ public class EtudiantServiceImpl implements IEtudiantService {
                     e.setMasterType(etudiantDto.getMasterType());
                      Etudiant updateEtudiant =  ietudiantRepository.save(e);
                     log.warn ( " Mise à jour de léétudiant {} effectué avec succès" , etudiantDto.getMatricule()) ;
-                    return iEtudiantMapper.toDto(updateEtudiant);
+                    return IEtudiantMapper.INSTANCE.toDto(updateEtudiant,new CycleAvoidingMappingContext());
                 })
                 .orElseThrow(() -> new RuntimeException("Etudiant inconnu"));
     }
@@ -53,5 +55,11 @@ public class EtudiantServiceImpl implements IEtudiantService {
     public Boolean delete(Long id) {
         ietudiantRepository.deleteById(id);
         return true;
+    }
+
+    @Override
+    public EtudiantDto findByNom(String nom) {
+        EtudiantDto etudiantDto = IEtudiantMapper.INSTANCE.toDto(ietudiantRepository.findByNom(nom),new CycleAvoidingMappingContext());
+        return etudiantDto;
     }
 }

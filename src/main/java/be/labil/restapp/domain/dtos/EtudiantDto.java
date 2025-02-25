@@ -1,12 +1,17 @@
 package be.labil.restapp.domain.dtos;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.NotNull;
-import lombok.Value;
+import lombok.*;
 
 import java.io.Serializable;
+import java.util.Set;
 
-@Value
-public class EtudiantDto implements Serializable {
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
+public class EtudiantDto {
 
     private Long id;
     @NotNull(message = "Le matricule ne peut pas être vide")
@@ -14,5 +19,7 @@ public class EtudiantDto implements Serializable {
     private String nom;
     private String prenom;
     private String masterType;
+    @JsonManagedReference
+    private Set<NoteDto> notes;
 
 }
